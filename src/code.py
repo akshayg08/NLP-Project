@@ -31,9 +31,21 @@ def distance_matrix(X1, Y1):
 	d_matrix = np.matmul(norm_X1, norm_Y1.T) + dot_p
 	return d_matrix
 
+def create_idx2word_dict(vocab):
+	idx2word = {}
+	for i in vocab:
+		idx2word[vocab[i]] = i
+
+	return idx2word
+
 # loading hindi english vocabulary and embedding matrices
-hindi_embedding_matrix = pickle.load(open("hindi_embedding_matrix.pkl", "rb"))
-english_embedding_matrix = pickle.load(open("/english_embedding_matrix.pkl", "rb"))
+hindi_embedding_matrix = pickle.load(open("./hindi_embedding_matrix.pkl", "rb"))
+english_embedding_matrix = pickle.load(open("./english_embedding_matrix.pkl", "rb"))
+hindi_vocab = pickle.load(open("./hindi_vocab.pkl", "rb"))
+english_vocab = pickle.load(open("./english_vocab.pkl", "rb"))
+
+hindi_idx2word = create_idx2word_dict(hindi_vocab)
+english_idx2word = create_idx2word_dict(english_vocab)
 
 X = hindi_embedding_matrix
 Y = english_embedding_matrix
@@ -63,7 +75,7 @@ nearest_neighbors = d_matrix.argmin(axis = 1)
 D[range(nearest_neighbors.shape[0]), nearest_neighbors] = 1
 
 #training loop
-num_iter = 100
+num_iter = 10000
 for i in range(num_iter):
 	#computing the optimal orthogonal matrix which maximizes the current dict D
 	u, s, vh = np.linalg.svd(np.dot(X.T, np.dot(D, Y)))
@@ -75,3 +87,8 @@ for i in range(num_iter):
 	d_matrix = distance_matrix(np.dot(X, WX), np.dot(Y, WY))
 	nearest_neighbors = d_matrix.argmin(axis = 1)
 	D[range(nearest_neighbors.shape[0]), nearest_neighbors] = 1
+
+#testing
+d_matrix = distance_matrix(np.dot(X, WX), np.dot(Y, WY))
+nearest_neighbors = d_matrix.argmin(axis = 1)
+print(hindi_idx2word[0], english_idx2word[nearest_neighbors[0]])
