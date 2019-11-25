@@ -1,57 +1,43 @@
+import os
 import pickle
-import fastText as ft
-import numpy as np 
+import numpy as np
+from pprint import pprint as print
+from gensim.test.utils import datapath
+from gensim.models.fasttext import FastText as FT_gensim
 
+EMBEDDING_DIM = 200
 MIN_FREQ = 5
-EMBEDDING_DIM = 100
 
-# creating vocabulary from the data
-def create_vocab(data):
-	vocab = {}
-	for sent in data:
-		for word in sent.strip().split():
-			if word.strip() not in vocab:
-				vocab[word.strip()] = 1
-			else:
-				vocab[word.strip()] += 1
-	return vocab
+def get_embed(path, name, lang):
+	print('Loading data from {0}'.format(path))
+	corpus = datapath(os.path.abspath(path))
+	model = FT_gensim(size = EMBEDDING_DIM, min_count=MIN_FREQ)
+	
+	print('Building a vocabulary for the data')
+	model.build_vocab(corpus_file=corpus)
+	print('Training fastText embeddings for the data')
+	model.train(corpus_file=corpus, epochs=model.epochs, total_examples=model.corpus_count, total_words=model.corpus_total_words)
 
-# Removing elements from vocab which have frequency less than min frequency and constructing embedding matrix
-def create_embedding_matrix(vocab, model):
-	idx = 0
+	model.wv.save_word2vec_format(lang+".vec", binary = False)
+
 	new_vocab = {}
 	embedding_matrix = []
+	idx = 0
 
-	for word in vocab:
-		if vocab[word] > MIN_FREQ:
-			new_vocab[word] = idx
-			embedding_matrix.append(model.get_word_vector(word))
-			idx += 1
+	print('Creating Word embedding matrix')
+	for word in model.wv.vocab:
+		new_vocab[word] = idx
+		embedding_matrix.append(model.wv[word])
+		idx += 1
 
 	embedding_matrix = np.array(embedding_matrix)
 
 	return new_vocab, embedding_matrix
 
-# training fastText embeddings for the data
-print("Training fastText embeddings on hindi data...")
-model1 = ft.train_unsupervised("./train.hi", model = "cbow", dim = EMBEDDING_DIM)
-print("Training fastText embeddings on english data...")
-model2 = ft.train_unsupervised("./train.en", model = "cbow", dim = EMBEDDING_DIM)
+reduced_hindi_vocab, hindi_embedding_matrix = get_embed('./train.hi', 'hi_mod.ft', "hindi")
+reduced_english_vocab, english_embedding_matrix = get_embed('./train.en', 'en_mod.ft', "english")
 
-# reading data
-with open("./train.hi") as f:
-	hindi_data = f.readlines()
-
-with open("./train.en") as f:
-	english_data = f.readlines()
-
-hindi_vocab = create_vocab(hindi_data)
-english_vocab = create_vocab(english_data)
-
-reduced_hindi_vocab, hindi_embedding_matrix = create_embedding_matrix(hindi_vocab, model1)
-reduced_english_vocab, english_embedding_matrix = create_embedding_matrix(english_vocab, model2)
-
-print("Saving the vocabulary and embedding matrix.")
+# print("Saving the vocabulary and embedding matrix.")
 
 pickle.dump(reduced_hindi_vocab, open("./hindi_vocab.pkl", "wb"))
 pickle.dump(hindi_embedding_matrix, open("./hindi_embedding_matrix.pkl", "wb"))
