@@ -10,6 +10,30 @@ author: Zubair Abid, Akshay Goindani
 
 Akshay Goindani, Zubair Abid
 
+
+## Paper Structure
+
+- [ ] Abstract
+- [ ] Introduction
+- [ ] Related Work
+- [ ] Proposed Solution
+    - [ ] Given Solution
+    - [ ] Errors in the solution
+    - [ ] Our improvements
+    - [ ] Analysis 
+- [ ] Experimental Settings
+    - [ ] Artetxe 2018
+    - [ ] Artetxe 2018 CSLS
+    - [ ] Our solution
+    - [ ] Our solution, CSLS 
+
+- [ ] Appendix: Evaluation of embeddings
+    - [ ] Intrinsic
+    - [ ] Extrinsic 
+
+
+
+
 ## TODO
 
 - [x] Visualisation:
@@ -58,7 +82,15 @@ We tackled the problem, largely, in three major steps:
 
 Now, we wanted to find out whether or not this was a problem unique to our particular language-pair or not; the paper having used 2 closely related languages might have gotten away with a suboptimal initialisation solution for other language pairs. 
 
-One way to check this is to download word embeddings for two other languages - say English and Italian - and running these through the program.
+The authors of the paper have made their code publicly available at [link], so we ran it on our data (english-hindi). The accuracies turned out to be almost the same, so it does seem to be a language-pairing concern. 
+
+Both our solution and the original paper get as much accuracy as a random initialisation would.
+
+We can then try to improve the learning process by adding a slight supervision element to it: in each iteration, we select n random known translation pairs in both languages and add that to the dictionary. 
+
+
+
+
 
 ### Building an evaluation suite
 
@@ -67,14 +99,6 @@ Since eye-estimation is a poor measure of model accuracy we need some sort of ev
 We employ two evaluation metrics: one intrinsic and one extrinsic. We also use multiple embeddings to compare results against: the baseline, the unsupervised solution trained, and iterative Procrustes (Conneau et al., 2018). 
 
 Read more about the evaluation methods in the [Appendix](#embedding-evaluation)
-
-| Model Name | Metric 1 | Metric 2 | Metric 2.1 |
-|------------|----------|----------|------------|
-| Baseline   | oof      | oouch    | nope       |
-| Artetxe    | oh no    | kk       | bleh       |
-| MUSE       |          |          |            |
-
-
 
 
 
@@ -134,7 +158,6 @@ for hi, en in word_pairs:
 ### Embedding Evaluation
 
 #### Intrinsic Evaluation: Word Translation
-
 
 Given a set of word pairs that we know translate equivalently in the two languages, we check their similarity to one another. Since both embeddings have been mapped into a common vector space, we can apply the transformation and then check for cosine similarity.
 
