@@ -75,7 +75,7 @@ nearest_neighbors = d_matrix.argmin(axis = 1)
 D[range(nearest_neighbors.shape[0]), nearest_neighbors] = 1
 
 #training loop
-num_iter = 10000
+num_iter = 10
 for i in range(num_iter):
 	#computing the optimal orthogonal matrix which maximizes the current dict D
 	u, s, vh = np.linalg.svd(np.dot(X.T, np.dot(D, Y)))
