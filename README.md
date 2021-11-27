@@ -43,23 +43,14 @@ Akshay Goindani, Zubair Abid
     - [ ] Task based:
         - [ ] Versus Facebook [Iterative Procrustes](https://github.com/facebookresearch/MUSE#the-supervised-way-iterative-procrustes-cpugpu)
 
-## Comments on the existing code
-
-- ~~`code.py`: sorted_MX should be sorting $\sqrt {M_x}$ instead of just $M_x$ I guess.~~ 
-- 
-
 ## Explaining the program
 
 Our end goal is to create a Multilingual Word Embedding, for English and Hindi, We are trying to do it in an Unsupervised manner, albeit we may shift to slightly supervised methods if things do not work out.
 
 
-### Setting up a baseline
-dbcjsdb
-
-
 ### Attempting Solution 1: Unsupervised Initialisation of A Seed Dictionary by exploiting Isometry of Individual Word Embeddings
 
-The first solution we approached was to implement the Paper given to us as an example. It creates Multilingual Word Embeddings for English-Italian without any supervision, exploiting the idea of isometry of word embeddings.
+The first solution we approached was to train the embeddings in an unsupervised manner. It creates Multilingual Word Embeddings for English-Italian without any supervision, exploiting the idea of isometry of word embeddings.
 
 We tackled the problem, largely, in three major steps:
 
@@ -181,49 +172,3 @@ for hi, en in word_pairs:
 
 cos_sims.average()
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-``` mermaid
-gantt
-    dateFormat DD-MM-YYY
-    axisFormat %m/%y
-
-    title Example
-    section example section
-    activity :active, 01-02-2019, 03-08-2019
-```
-
-- a
-- list
-- of
-- random
-- things
-- to
-- fill
-- up
-- some
-- space
-- so
-- i
-- i
-- can
-- so
-- this
-- stuff
-- nicer
-- can
-- so
-- this
-- stuff
-- nicer
