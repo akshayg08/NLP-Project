@@ -32,20 +32,9 @@ Akshay Goindani, Zubair Abid
     - [ ] Extrinsic 
 
 
-
-
-## TODO
-
-- [x] Visualisation:
-    - [x] Similarity Distribution of Words
-- [ ] Evaluation:
-    - [ ] Mapping Parallel Corpora to the embedding
-    - [ ] Task based:
-        - [ ] Versus Facebook [Iterative Procrustes](https://github.com/facebookresearch/MUSE#the-supervised-way-iterative-procrustes-cpugpu)
-
 ## Explaining the program
 
-Our end goal is to create a Multilingual Word Embedding, for English and Hindi, We are trying to do it in an Unsupervised manner, albeit we may shift to slightly supervised methods if things do not work out.
+Our end goal is to create a Multilingual Word Embedding, for English and Hindi, We first use an unsupervised approach. In order to improve the performance, we later add a little supervision.
 
 
 ### Attempting Solution 1: Unsupervised Initialisation of A Seed Dictionary by exploiting Isometry of Individual Word Embeddings
